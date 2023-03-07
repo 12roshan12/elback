@@ -1,0 +1,69 @@
+const mongoose = require('mongoose');
+
+const Query_schema = new mongoose.Schema({
+    name: { type: String, required: true },
+    image: { type: String, required: true },
+    slogan: { type: String, required: true },
+    createdby: String,
+    updatedby: String,
+    createdon: { type: Date, default: Date.now() },
+    updatedon: { type: Date, default: Date.now() }
+})
+
+const Query_model = mongoose.model('Query', Query_schema)
+
+const NewQueryModel = (req) => {
+    return new Promise(async (resolve, reject) => {
+
+        if (req.body?.id == '') {
+            delete req.body.id
+            Query_table = new Query_model(req.body)
+            Query_table.save((err, data) => {
+                if (err) resolve({ status: 500, error: true, err: err })
+                else resolve({ status: 200, error: null, data: data })
+            })
+        }
+        else {
+            Query_model.findByIdAndUpdate({ _id: req.body.id }, req.body, function (err, data) {
+                if (err) { resolve({ status: 500, error: true, err: err }) }
+                else {
+                    if (data == null) {
+                        resolve({ status: 400, error: true, err: 'Query Not Found' })
+                    }
+                    else {
+                        resolve({ status: 200, error: null, data: 'Query Successfully Updated' })
+                    }
+                }
+            })
+        }
+
+    })
+}
+
+const GetAllQueryModel = (req) => {
+    return new Promise((resolve, reject) => {
+        Query_model.find({}, function (err, data) {
+            if (err) resolve({ status: 500, error: true, err: err })
+            else resolve({ status: 200, error: null, data: data })
+        })
+    })
+}
+
+
+const QueryDeleteModel = (req) => {
+    return new Promise((resolve, reject) => {
+        Query_model.deleteOne({ _id: req.params.id }, function (err, data) {
+            if (err) { resolve({ status: 500, error: true, err: err }) }
+            else {
+                if (data.deletedCount == 0) {
+                    resolve({ status: 400, error: true, err: "Query Not Found" })
+                }
+                else {
+                    resolve({ status: 200, error: null, data: "Query Successfully  Deleted" })
+                }
+            }
+        })
+    })
+}
+
+module.exports = { NewQueryModel, QueryDeleteModel, GetAllQueryModel }
