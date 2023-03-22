@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
 
 const Booking_schema = new mongoose.Schema({
-    packageId:String,
-    packageName:String,
-    name:String,
-    email:String,
-    contact:String,
-    totalTraveller:String,
-    date:Date,
-    price:String,
-    message:String,
+    packageId: String,
+    packageName: String,
+    name: String,
+    email: String,
+    contactnumber: String,
+    totalTraveller: String,
+    date: Date,
+    address: { type: String, default: "Nepal" },
+    price: String,
+    message: String,
+    status: { type: Number, default: 0 },
+    visited: { type: Boolean, default: false },
     createdby: String,
     updatedby: String,
     createdon: { type: Date, default: Date.now() },
@@ -21,8 +24,8 @@ const Booking_model = mongoose.model('Booking', Booking_schema)
 const NewBookingModel = (req) => {
     return new Promise(async (resolve, reject) => {
 
-        if (req.body?.id == '') {
-            delete req.body.id
+        if (req.body?._id == '') {
+            delete req.body._id
             Booking_table = new Booking_model(req.body)
             Booking_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })

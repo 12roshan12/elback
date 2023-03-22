@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const category_schema = new mongoose.Schema({
+const notice_schema = new mongoose.Schema({
     name: { type: String, required: true },
     image: { type: String, required: true },
-    slogan: { type: String, required: true },
+    description: { type: String, required: true },
     createdby: String,
     updatedby: String,
     status: {type:Boolean,default:true},
@@ -11,28 +11,28 @@ const category_schema = new mongoose.Schema({
     updatedon: { type: Date, default: Date.now() }
 })
 
-const category_model = mongoose.model('Category', category_schema)
+const notice_model = mongoose.model('Notice', notice_schema)
 
-const NewCategoryModel = (req) => {
+const NewnoticeModel = (req) => {
     return new Promise(async (resolve, reject) => {
 
         if (req.body?._id == '') {
             delete req.body._id
-            category_table = new category_model(req.body)
-            category_table.save((err, data) => {
+            notice_table = new notice_model(req.body)
+            notice_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
                 else resolve({ status: 200, error: null, data: data })
             })
         }
         else {
-            category_model.findByIdAndUpdate({ _id: req.body._id }, req.body, function (err, data) {
+            notice_model.findByIdAndUpdate({ _id: req.body._id }, req.body, function (err, data) {
                 if (err) { resolve({ status: 500, error: true, err: err }) }
                 else {
                     if (data == null) {
-                        resolve({ status: 400, error: true, err: 'Category Not Found' })
+                        resolve({ status: 400, error: true, err: 'notice Not Found' })
                     }
                     else {
-                        resolve({ status: 200, error: null, data: 'Category Successfully Updated' })
+                        resolve({ status: 200, error: null, data: 'notice Successfully Updated' })
                     }
                 }
             })
@@ -41,9 +41,9 @@ const NewCategoryModel = (req) => {
     })
 }
 
-const GetAllCategoryModel = (req) => {
+const GetAllnoticeModel = (req) => {
     return new Promise((resolve, reject) => {
-        category_model.find({}, function (err, data) {
+        notice_model.find({}, function (err, data) {
             if (err) resolve({ status: 500, error: true, err: err })
             else resolve({ status: 200, error: null, data: data })
         })
@@ -51,20 +51,20 @@ const GetAllCategoryModel = (req) => {
 }
 
 
-const CategoryDeleteModel = (req) => {
+const noticeDeleteModel = (req) => {
     return new Promise((resolve, reject) => {
-        category_model.deleteOne({ _id: req.params.id }, function (err, data) {
+        notice_model.deleteOne({ _id: req.params.id }, function (err, data) {
             if (err) { resolve({ status: 500, error: true, err: err }) }
             else {
                 if (data.deletedCount == 0) {
-                    resolve({ status: 400, error: true, err: "Category Not Found" })
+                    resolve({ status: 400, error: true, err: "notice Not Found" })
                 }
                 else {
-                    resolve({ status: 200, error: null, data: "Category Successfully  Deleted" })
+                    resolve({ status: 200, error: null, data: "notice Successfully  Deleted" })
                 }
             }
         })
     })
 }
 
-module.exports = { NewCategoryModel, CategoryDeleteModel, GetAllCategoryModel }
+module.exports = { NewnoticeModel, noticeDeleteModel, GetAllnoticeModel }

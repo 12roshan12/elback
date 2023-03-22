@@ -4,7 +4,7 @@ const { NewQueryModel, QueryDeleteModel, GetAllQueryModel } = require('../models
 const NewQueryController = async (req, res) => {
     let result = await NewQueryModel(req)
     if (result.error == null) {
-        res.status(result.status).send({ api_status: 'Success', data: result.data })
+        res.status(result.status).send({ api_status: 'Success', message:result.message })
     }
     else {
         res.status(result.status).send({ api_status: 'Error', error: result.err })

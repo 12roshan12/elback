@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const trip_schema = new mongoose.Schema({
-    category: { type: String, required: true },
-    name: { type: String, required: true },
-    bannerImage: { type: String, required: true },
-    tripImage: { type: String, required: true },
-    video: { type: String, required: true },
-    price: { type: String, required: true },
-    isSpecialOffer: Boolean,
+    category: { type: String },
+    name: { type: String },
+    bannerImage: { type: String },
+    tripImage: { type: String },
+    video: { type: String },
+    imageGallery: [],
+    price: { type: String },
+    isSpecialOffer: { type: Boolean, default: false },
     offerPrice: String,
     summary: {
         duration: String,
@@ -18,18 +19,18 @@ const trip_schema = new mongoose.Schema({
         altitude: String,
         weather: String,
     },
-    description: { type: String, required: true },
+    description: { type: String },
     itinerary: {
-        description: { type: String, required: true },
+        description: { type: String },
         details: [
             {
-                head: { type: String, required: true },
-                headDetails: { type: String, required: true },
+                head: { type: String },
+                headDetails: { type: String },
             }
         ]
     },
-    inclusion: { type: [], required: true },
-    exclusion: { type: [], required: true },
+    inclusion: { type: [] },
+    exclusion: { type: [] },
     aboutTrip: [
         {
             head: { type: String },
@@ -50,6 +51,9 @@ const trip_schema = new mongoose.Schema({
             comment: String
         }
     ],
+    totalViews: { type: Number, default: 500 },
+    rating: { type: Number, default: 4.5 },
+    status: { type: Boolean, default: true},
     createdby: String,
     updatedby: String,
     createdon: { type: Date, default: Date.now() },
@@ -61,8 +65,8 @@ const trip_model = mongoose.model('Trip', trip_schema)
 const NewTripModel = (req) => {
     return new Promise(async (resolve, reject) => {
 
-        if (req.body?.id == '') {
-            delete req.body.id
+        if (req.body?._id == '') {
+            delete req.body._id
             trip_table = new trip_model(req.body)
             trip_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
@@ -70,7 +74,7 @@ const NewTripModel = (req) => {
             })
         }
         else {
-            trip_model.findByIdAndUpdate({ _id: req.body.id }, req.body, function (err, data) {
+            trip_model.findByIdAndUpdate({ _id: req.body._id }, req.body, function (err, data) {
                 if (err) { resolve({ status: 500, error: true, err: err }) }
                 else {
                     if (data == null) {
@@ -88,7 +92,7 @@ const NewTripModel = (req) => {
 
 const GetAllTripByIdModel = (req) => {
     return new Promise((resolve, reject) => {
-        trip_model.findById({_id:req.params.id}, function (err, data) {
+        trip_model.findById({ _id: req.params.id }, function (err, data) {
             if (err) resolve({ status: 500, error: true, err: err })
             else resolve({ status: 200, error: null, data: data })
         })
@@ -121,4 +125,4 @@ const TripDeleteModel = (req) => {
     })
 }
 
-module.exports = { NewTripModel, TripDeleteModel, GetAllTripModel,GetAllTripByIdModel }
+module.exports = { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel }

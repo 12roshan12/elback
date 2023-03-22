@@ -4,7 +4,7 @@ const { NewBookingModel, BookingDeleteModel, GetAllBookingModel } = require('../
 const NewBookingController = async (req, res) => {
     let result = await NewBookingModel(req)
     if (result.error == null) {
-        res.status(result.status).send({ api_status: 'Success', data: result.data })
+        res.status(result.status).send({ api_status: 'Success',  message:"Booking Success. Please check your profile or email for confirmation." })
     }
     else {
         res.status(result.status).send({ api_status: 'Error', error: result.err })
