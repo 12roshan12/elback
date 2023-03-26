@@ -16,7 +16,6 @@ const VerifyController = async (req, res) => {
 const SignInController = async (req, res) => {
     const result = await (SignInModel(req))
     if (result.length == 1) {
-        console.log(result)
         bcrypt.compare(req.body.password, result[0].password, function (err, bool) {
             if (bool == false) {
                 res.status(400).send({ success: false, message: 'Passwords do not match' });

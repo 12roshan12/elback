@@ -16,8 +16,8 @@ const trip_schema = new mongoose.Schema({
         startPoint: String,
         endPoint: String,
         groupSize: String,
-        altitude: String,
-        weather: String,
+        maxaltitude: String,
+        bestSeason: String,
     },
     description: { type: String },
     itinerary: {
@@ -70,7 +70,7 @@ const NewTripModel = (req) => {
             trip_table = new trip_model(req.body)
             trip_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
-                else resolve({ status: 200, error: null, data: data })
+                else resolve({ status: 200, error: null, data: data,message: 'Trip added succesfully' })
             })
         }
         else {
@@ -78,10 +78,10 @@ const NewTripModel = (req) => {
                 if (err) { resolve({ status: 500, error: true, err: err }) }
                 else {
                     if (data == null) {
-                        resolve({ status: 400, error: true, err: 'Trip Not Found' })
+                        resolve({ status: 400, error: true, message: 'Trip Not Found' })
                     }
                     else {
-                        resolve({ status: 200, error: null, data: 'Trip Successfully Updated' })
+                        resolve({ status: 200, error: null, message: 'Trip successfully updated' })
                     }
                 }
             })

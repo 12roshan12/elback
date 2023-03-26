@@ -22,7 +22,6 @@ const GetAllUserController = async (req, res) => {
 }
 
 const GetUserByIdController = async (req, res) => {
-    console.log(req);
     let result = await GetUserByIdModel(req)
     if (result.error == null) {
         res.status(result.status).send({ api_status: 'Success', data: result.data })

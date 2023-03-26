@@ -4,8 +4,8 @@ const Blog_schema = new mongoose.Schema({
     name: { type: String, required: true },
     image: { type: String, required: true },
     description: { type: String, required: true },
-    category: { type: String, required: true },
-    trip: { type: String, required: true },
+    category: { type: String },
+    trip: { type: String },
     author: {
         name: { type: String, required: true },
         image: { type: String, required: true },

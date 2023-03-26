@@ -4,7 +4,7 @@ const { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel } = 
 const NewTripController = async (req, res) => {
     let result = await NewTripModel(req)
     if (result.error == null) {
-        res.status(result.status).send({ api_status: 'Success', data: result.data })
+        res.status(result.status).send({ api_status: 'Success', data: result.data,message:result.message })
     }
     else {
         res.status(result.status).send({ api_status: 'Error', error: result.err })

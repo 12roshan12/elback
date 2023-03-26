@@ -10,7 +10,6 @@ router.post('/upload', (req, res) => {
     const path = __dirname + "/../uploads/" + fileName;
     image.mv(path, (err) => {
         if (err) {
-            console.log(err);
             return res.status(500).send(err);
         }
         return res.send({ status: "success", path: fileName });

@@ -12,7 +12,7 @@ const SignUpModel = (req) => {
             user_table.save(function (err, data) {
                 if (err) resolve(err);
                 else {
-                    resolve({ success: true, message: "User created successfully" })
+                    resolve({ success: true, message: "User created successfully.Please proceed to login." })
                 }
             });
         });
