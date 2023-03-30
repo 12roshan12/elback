@@ -1,5 +1,5 @@
 
-const { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel } = require('../models/Trip.model')
+const { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel } = require('../models/trip.model')
 
 const NewTripController = async (req, res) => {
     let result = await NewTripModel(req)
