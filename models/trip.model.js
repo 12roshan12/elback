@@ -46,14 +46,15 @@ const trip_schema = new mongoose.Schema({
     customerReview: [
         {
             userid: String,
-            username: String,
-            rating: Number,
-            comment: String
+            user: String,
+            rating: String,
+            comment: String,
+            postedOn: { type: Date, default: Date.now() },
         }
     ],
     totalViews: { type: Number, default: 500 },
     rating: { type: Number, default: 4.5 },
-    status: { type: Boolean, default: true},
+    status: { type: Boolean, default: true },
     createdby: String,
     updatedby: String,
     createdon: { type: Date, default: Date.now() },
@@ -70,7 +71,7 @@ const NewTripModel = (req) => {
             trip_table = new trip_model(req.body)
             trip_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
-                else resolve({ status: 200, error: null, data: data,message: 'Trip added succesfully' })
+                else resolve({ status: 200, error: null, data: data, message: 'Trip added succesfully' })
             })
         }
         else {
