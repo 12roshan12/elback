@@ -1,5 +1,5 @@
 
-const {  UserDeleteModel, GetAllUserModel, GetUserByIdModel,NewUserModel } = require('../models/User.model')
+const {  UserDeleteModel, GetAllUserModel, GetUserByIdModel,NewUserModel } = require('../models/user.model')
 
 const UserDeleteController = async (req, res) => {
     let result = await UserDeleteModel(req)
