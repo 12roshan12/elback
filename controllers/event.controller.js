@@ -1,18 +1,8 @@
 
-const { NewQueryModel, QueryDeleteModel, GetAllQueryModel,GetAllQueryByUserModel } = require('../models/query.model')
+const { NewEventModel, EventDeleteModel, GetAllEventModel, toggleEvent } = require('../models/event.model')
 
-const NewQueryController = async (req, res) => {
-    let result = await NewQueryModel(req)
-    if (result.error == null) {
-        res.status(result.status).send({ api_status: 'Success', message:result.message })
-    }
-    else {
-        res.status(result.status).send({ api_status: 'Error', error: result.err })
-    }
-}
-
-const QueryDeleteController = async (req, res) => {
-    let result = await QueryDeleteModel(req)
+const NewEventController = async (req, res) => {
+    let result = await NewEventModel(req)
     if (result.error == null) {
         res.status(result.status).send({ api_status: 'Success', data: result.data })
     }
@@ -21,8 +11,8 @@ const QueryDeleteController = async (req, res) => {
     }
 }
 
-const GetAllQueryController = async (req, res) => {
-    let result = await GetAllQueryModel(req)
+const EventDeleteController = async (req, res) => {
+    let result = await EventDeleteModel(req)
     if (result.error == null) {
         res.status(result.status).send({ api_status: 'Success', data: result.data })
     }
@@ -31,8 +21,18 @@ const GetAllQueryController = async (req, res) => {
     }
 }
 
-const GetAllQueryByUserController = async (req, res) => {
-    let result = await GetAllQueryByUserModel(req)
+const GetAllEventController = async (req, res) => {
+    let result = await GetAllEventModel(req)
+    if (result.error == null) {
+        res.status(result.status).send({ api_status: 'Success', data: result.data })
+    }
+    else {
+        res.status(result.status).send({ api_status: 'Error', error: result.err })
+    }
+}
+
+const ToggleEventController = async (req, res) => {
+    let result = await toggleEvent(req)
     if (result.error == null) {
         res.status(result.status).send({ api_status: 'Success', data: result.data })
     }
@@ -42,4 +42,4 @@ const GetAllQueryByUserController = async (req, res) => {
 }
 
 
-module.exports = { NewQueryController, QueryDeleteController, GetAllQueryController,GetAllQueryByUserController }
+module.exports = { NewEventController, EventDeleteController, GetAllEventController, ToggleEventController }

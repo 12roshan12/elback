@@ -64,10 +64,13 @@ const trip_schema = new mongoose.Schema({
 const trip_model = mongoose.model('Trip', trip_schema)
 
 const NewTripModel = (req) => {
+    // const reg = new RegExp("i",req.body.name)
     return new Promise(async (resolve, reject) => {
 
         if (req.body?._id == '') {
+            const rndInt = Math.floor(Math.random() * 500) + 1
             delete req.body._id
+            req.body['totalViews'] = rndInt
             trip_table = new trip_model(req.body)
             trip_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
@@ -88,6 +91,21 @@ const NewTripModel = (req) => {
             })
         }
 
+        // trip_model.find({$or:[{name:reg,code:reg}]})
+
+    })
+}
+
+const PostCommentModel = (req) => {
+    return new Promise((resolve, reject) => {
+        trip_model.updateOne({ _id: req.body.tripId }, { $push: { "customerReview": req.body } }, function (err, data) {
+            if (err) {
+                resolve({ error: err, status: 400 })
+            }
+            else {
+                resolve({ error: null, status: 200 })
+            }
+        })
     })
 }
 
@@ -95,7 +113,13 @@ const GetAllTripByIdModel = (req) => {
     return new Promise((resolve, reject) => {
         trip_model.findById({ _id: req.params.id }, function (err, data) {
             if (err) resolve({ status: 500, error: true, err: err })
-            else resolve({ status: 200, error: null, data: data })
+            else {
+                resolve({ status: 200, error: null, data: data })
+                trip_model.findOneAndUpdate({ _id: req.params.id }, { $inc: { 'totalViews': 1 } }, { new: true }, function (err, data) {
+                    if (err) console.log("bbb")
+                    else console.log("aaa")
+                })
+            }
         })
     })
 }
@@ -126,4 +150,4 @@ const TripDeleteModel = (req) => {
     })
 }
 
-module.exports = { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel }
+module.exports = { NewTripModel, TripDeleteModel, GetAllTripModel, GetAllTripByIdModel, PostCommentModel }

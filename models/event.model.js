@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const notice_schema = new mongoose.Schema({
+const Event_schema = new mongoose.Schema({
     name: { type: String, required: true },
-    image: { type: String, required: true },
+    imageGallery: [],
     description: { type: String, required: true },
     createdby: String,
     updatedby: String,
@@ -11,28 +11,28 @@ const notice_schema = new mongoose.Schema({
     updatedon: { type: Date, default: Date.now() }
 })
 
-const notice_model = mongoose.model('Notice', notice_schema)
+const Event_model = mongoose.model('Event', Event_schema)
 
-const NewnoticeModel = (req) => {
+const NewEventModel = (req) => {
     return new Promise(async (resolve, reject) => {
 
         if (req.body?._id == '') {
             delete req.body._id
-            notice_table = new notice_model(req.body)
-            notice_table.save((err, data) => {
+            Event_table = new Event_model(req.body)
+            Event_table.save((err, data) => {
                 if (err) resolve({ status: 500, error: true, err: err })
                 else resolve({ status: 200, error: null, data: data })
             })
         }
         else {
-            notice_model.findByIdAndUpdate({ _id: req.body._id }, req.body, function (err, data) {
+            Event_model.findByIdAndUpdate({ _id: req.body._id }, req.body, function (err, data) {
                 if (err) { resolve({ status: 500, error: true, err: err }) }
                 else {
                     if (data == null) {
-                        resolve({ status: 400, error: true, err: 'notice Not Found' })
+                        resolve({ status: 400, error: true, err: 'Event Not Found' })
                     }
                     else {
-                        resolve({ status: 200, error: null, data: 'notice Successfully Updated' })
+                        resolve({ status: 200, error: null, data: 'Event Successfully Updated' })
                     }
                 }
             })
@@ -41,9 +41,9 @@ const NewnoticeModel = (req) => {
     })
 }
 
-const GetAllnoticeModel = (req) => {
+const GetAllEventModel = (req) => {
     return new Promise((resolve, reject) => {
-        notice_model.find({}, function (err, data) {
+        Event_model.find({}, function (err, data) {
             if (err) resolve({ status: 500, error: true, err: err })
             else resolve({ status: 200, error: null, data: data })
         })
@@ -51,29 +51,29 @@ const GetAllnoticeModel = (req) => {
 }
 
 
-const noticeDeleteModel = (req) => {
+const EventDeleteModel = (req) => {
     return new Promise((resolve, reject) => {
-        notice_model.deleteOne({ _id: req.params.id }, function (err, data) {
+        Event_model.deleteOne({ _id: req.params.id }, function (err, data) {
             if (err) { resolve({ status: 500, error: true, err: err }) }
             else {
                 if (data.deletedCount == 0) {
-                    resolve({ status: 400, error: true, err: "notice Not Found" })
+                    resolve({ status: 400, error: true, err: "Event Not Found" })
                 }
                 else {
-                    resolve({ status: 200, error: null, data: "notice Successfully  Deleted" })
+                    resolve({ status: 200, error: null, data: "Event Successfully  Deleted" })
                 }
             }
         })
     })
 }
 
-const toggleNotice = (req) => {
+const toggleEvent = (req) => {
     return new Promise((resolve, reject) => {
-        notice_model.findOneAndUpdate({ _id: req.body.id }, { $set: { status: req.body.status } }, function (err, data) {
+        Event_model.findOneAndUpdate({ _id: req.body.id }, { $set: { status: req.body.status } }, function (err, data) {
             if (err) { resolve({ status: 500, error: true, err: err }) }
             else {
                 if (data == null) {
-                    resolve({ status: 400, error: true, err: "Notice Not Found" })
+                    resolve({ status: 400, error: true, err: "Event Not Found" })
                 }
                 else {
                     resolve({ status: 200, error: null, data: "Status changed" })
@@ -83,4 +83,4 @@ const toggleNotice = (req) => {
     })
 }
 
-module.exports = { NewnoticeModel, noticeDeleteModel, GetAllnoticeModel, toggleNotice }
+module.exports = { NewEventModel, EventDeleteModel, GetAllEventModel, toggleEvent }
